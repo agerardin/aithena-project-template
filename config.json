@@ -1,0 +1,6 @@
+{
+    "project_name": "solara-multipage",
+    "author_name": "Antoine Gerardin",
+    "author_email": "antoine.gerardin@nih.gov",
+    "packages": ["aithena.apps.solara_multipage"]
+}
