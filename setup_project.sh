@@ -1,10 +1,18 @@
-CONFIG_FILE=$1
+# Function to terminate the script without killing the shell
+terminate_script() {
+    echo "$1"
+    return 1
+}
 
-echo "Running build script with configuration file: $CONFIG_FILE"
+# Check if the configuration file is provided as a command-line argument
+if [ "$#" -ne 1 ]; then
+    terminate_script "Usage: $0 <config.json>"
+fi
+
+CONFIG_FILE=$1
 
 # Run the build script
 python build_script_final.py "$CONFIG_FILE"
-echo "Build script completed"
 
 # Check if jq is available
 if command -v jq &> /dev/null; then
@@ -21,11 +29,10 @@ echo "Extracted project name: $PROJECT_NAME"
 
 # Change into the newly created project directory
 if [ -d "$PROJECT_NAME" ]; then
-    cd "$PROJECT_NAME" || exit
+    cd "$PROJECT_NAME" || terminate_script "Failed to change directory to $PROJECT_NAME"
     echo "Changed directory to $PROJECT_NAME"
 else
-    echo "Directory $PROJECT_NAME does not exist"
-    exit 1
+    terminate_script "Directory $PROJECT_NAME does not exist"
 fi
 
 # Activate the virtual environment
@@ -33,8 +40,7 @@ if [ -f ".venv/bin/activate" ]; then
     source .venv/bin/activate
     echo "Activated virtual environment"
 else
-    echo "Virtual environment activation script not found"
-    exit 1
+    terminate_script "Virtual environment activation script not found"
 fi
 
 # Run poetry install
@@ -42,6 +48,5 @@ if command -v poetry &> /dev/null; then
     poetry install
     echo "Ran poetry install"
 else
-    echo "Poetry is not installed. Please install poetry and try again."
-    exit 1
+    terminate_script "Poetry is not installed. Please install poetry and try again."
 fi

@@ -5,8 +5,8 @@ import json
 import sys
 
 # Check if the configuration file is provided as a command-line argument
-if len(sys.argv) < 2 or len(sys.argv) > 3:
-    print("Usage: python build_script_final.py <config.json> [destination_path]")
+if len(sys.argv) < 2 or len(sys.argv) > 2:
+    print("Usage: python build_script_final.py <config.json>")
     sys.exit(1)
 
 config_file = sys.argv[1]
@@ -300,38 +300,15 @@ def is_git_repo(directory):
         subprocess.run(["git", "-C", directory, "rev-parse", "--show-toplevel"], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         return True
     except subprocess.CalledProcessError:
-        return False
-
-# Copy the project folder to the destination path if provided
-if destination_path:
-    destination_project_path = os.path.join(destination_path, project_name)
-    shutil.copytree(project_name, destination_project_path, dirs_exist_ok=True)
-    print(f"Copied project to {destination_project_path}")
-else:
-    destination_project_path = project_name
-
-# Check if the project directory or any of its parent directories is a Git repository
-# and that we are not in the template repo.
-if destination_project_path != project_name:
-    if is_git_repo(project_name):
-        print(f"{project_name} is part of a Git repository.")
-        subprocess.run([f"{project_name}/.venv/bin/pre-commit", "install"])
-    else:
-        print(f"{project_name} is not part of a Git repository.")
-        print(f"precommit-hooks will not be installed.")
-else:
-    print(f"{project_name} installed in current directory.")
-    print(f"precommit-hooks will not be installed.")
-    
+        return False   
 
 subprocess.run(["poetry install"], shell=True, cwd=project_name)
 
 # Run poetry install
 if subprocess.run(["poetry", "--version"], stdout=subprocess.PIPE, stderr=subprocess.PIPE).returncode == 0:
-    subprocess.run(["poetry", "install"], cwd=destination_project_path)
-    print("Ran poetry install")
+    subprocess.run(["poetry", "install"], cwd=project_name)
+    print("Ran poetry install.")
 else:
-    print("Poetry is not installed. Please install poetry and try again.")
-    sys.exit(1)
+    print("Poetry is not installed. Package will not be installed.")
 
 print("Project scaffolded successfully!")
