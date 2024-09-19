@@ -12,7 +12,7 @@ fi
 CONFIG_FILE=$1
 
 # Run the build script
-python build_script_final.py "$CONFIG_FILE"
+python build_script.py "$CONFIG_FILE"
 
 # Check if jq is available
 if command -v jq &> /dev/null; then
