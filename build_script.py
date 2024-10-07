@@ -10,7 +10,6 @@ if len(sys.argv) < 2 or len(sys.argv) > 2:
     sys.exit(1)
 
 config_file = sys.argv[1]
-destination_path = sys.argv[2] if len(sys.argv) == 3 else None
 
 # Load configuration from JSON file
 with open(config_file, "r") as f:

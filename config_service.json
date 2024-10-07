@@ -1,6 +1,6 @@
 {
-    "project_name": "solara-multipage",
+    "project_name": "riddle-service",
     "author_name": "Antoine Gerardin",
     "author_email": "antoine.gerardin@nih.gov",
-    "packages": ["aithena.apps.solara_multipage"]
+    "packages": ["aithena.services.riddle"]
 }
